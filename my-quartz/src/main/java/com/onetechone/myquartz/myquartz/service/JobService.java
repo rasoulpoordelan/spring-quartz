@@ -2,6 +2,7 @@ package com.onetechone.myquartz.myquartz.service;
 
 import static org.quartz.JobBuilder.newJob;
 
+import com.onetechone.myquartz.myquartz.job.TestDataJob;
 import com.onetechone.myquartz.myquartz.job.TestJob;
 import com.onetechone.myquartz.myquartz.job.TestSecJob;
 import com.onetechone.myquartz.myquartz.job.TestThirdJob;
@@ -9,6 +10,7 @@ import com.onetechone.myquartz.myquartz.model.Person;
 import com.onetechone.myquartz.myquartz.repository.PersonRepository;
 import java.util.List;
 import org.joda.time.LocalDateTime;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
@@ -71,6 +73,24 @@ public class JobService {
     Trigger trigger = TriggerBuilder.newTrigger()
         .withIdentity("myTrigger30", "group30")
         .startAt(LocalDateTime.now().plusSeconds(6).toDate())
+        .build();
+
+    schedulerFactoryBean.getObject().scheduleJob(job, trigger);
+  }
+
+  public void startInSpacificTimeWithDataOnce() throws SchedulerException {
+
+    JobDataMap jobDataMap = new JobDataMap();
+    jobDataMap.put("name", "rasoul");
+
+    JobDetail job = newJob(TestDataJob.class)
+        .withIdentity("myJob40", "group_40")
+        .setJobData(jobDataMap)
+        .build();
+
+    Trigger trigger = TriggerBuilder.newTrigger()
+        .withIdentity("myTrigger40", "group40")
+        .startAt(LocalDateTime.now().plusSeconds(3).toDate())
         .build();
 
     schedulerFactoryBean.getObject().scheduleJob(job, trigger);

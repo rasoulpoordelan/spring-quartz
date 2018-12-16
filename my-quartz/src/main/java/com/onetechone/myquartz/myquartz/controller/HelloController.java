@@ -30,4 +30,10 @@ public class HelloController {
     return "run one 6 second later";
   }
 
+  @RequestMapping(value = "/start4")
+  public String startWithData() throws SchedulerException {
+    jobService.startInSpacificTimeWithDataOnce();
+    return "run one with data";
+  }
+
 }
