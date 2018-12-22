@@ -49,10 +49,17 @@ public class QuartzSchedulerConfig {
   public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
 
     SchedulerFactoryBean factory = new SchedulerFactoryBean();
+
     factory.setOverwriteExistingJobs(true);
     factory.setDataSource(quartzDataSource);
+
+    AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
+    jobFactory.setApplicationContext(applicationContext);
+    factory.setJobFactory(jobFactory);
+
     factory.setQuartzProperties(quartzProperties());
     factory.setApplicationContext(applicationContext);
+
     factory.start();
     return factory;
   }
